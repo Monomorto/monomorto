@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Dart Erfolge</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-blob">M</span>
+        <div>
+          <p class="brand-title">Monomorto</p>
+        </div>
+      </div>
+      <ul class="sidebar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dart.html" class="active">Dart</a></li>
+        <li><a href="projekte.html">Projekte</a></li>
+        <li><a href="gaming.html">Gaming</a></li>
+        <li style="margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">
+          <a href="impressum.html" style="font-size: 12px; color: #8f98b2;">Impressum</a>
+        </li>
+        <li>
+          <a href="datenschutz.html" style="font-size: 12px; color: #8f98b2;">Datenschutz</a>
+        </li>
+      </ul>
+    </aside>
+    <main class="main">
+      <div class="topbar">
+        <h1>Dart Erfolge</h1>
+      </div>
+      <div class="filter-panel">
+        <div class="filter-group">
+          <label for="filterSince">Seit...</label>
+          <input id="filterSince" class="filter-input" type="date">
+        </div>
+        <div class="filter-actions">
+          <button type="button" class="filter-button" data-filter="all">Alle</button>
+          <button type="button" class="filter-button" data-filter="2025">2025</button>
+          <button type="button" class="filter-button" data-filter="2026">2026</button>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h2>180er</h2>
+          <p class="count">6</p>
+          <ul class="entry-list">
+            <li>14.03.2026</li>
+            <li>17.01.2026</li>
+            <li>10.01.2026</li>
+            <li>19.11.2025</li>
+            <li>12.10.2025</li>
+            <li>01.08.2025</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>171er</h2>
+          <p class="count">4</p>
+          <ul class="entry-list">
+            <li>19.09.2025</li>
+            <li>05.09.2025</li>
+            <li>03.09.2025</li>
+            <li>08.08.2025</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>High-Finishes</h2>
+          <p class="count">13</p>
+          <ul class="entry-list">
+            <li>127 – 23.04.2026 (19 T18 T18)</li>
+            <li>112 – 23.04.2026 (T20 12 D20)</li>
+            <li>139 – 14.03.2026 (19 T20 T20)</li>
+            <li>111 - 24.01.2026 (T19 T18)</li>
+            <li>105 - 17.01.2026 (19 T18 D16)</li>
+            <li>114 - 08.01.2026 (T19 19 D19)</li>
+            <li>107 - 29.12.2025 (T19 Bull)</li>
+            <li>114 - 29.11.2025 (3 T17 T20)</li>
+            <li>126 - 27.11.2025 (T18 12 T20)</li>
+            <li>120 – 19.11.2025 (20 T20 D20)</li>
+            <li>120 – 05.09.2025 (T18 T6 T16)</li>
+            <li>100 – 03.09.2025 (T20 D20)</li>
+            <li>100 – 08.08.2025 (20 D20 D20)</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    (function() {
+      let activeYear = null;
+      const sinceInput = document.getElementById('filterSince');
+      const buttons = document.querySelectorAll('.filter-button');
+      const cards = [...document.querySelectorAll('.card')];
+
+      cards.forEach(card => {
+        const total = card.querySelectorAll('.entry-list li').length;
+        card.dataset.total = total;
+      });
+
+      function parseDate(text) {
+        const match = text.match(/\b(\d{2})\.(\d{2})\.(\d{4})\b/);
+        if (!match) return null;
+        return new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
+      }
+
+      function setActiveButton(filterKey) {
+        buttons.forEach(button => {
+          button.classList.toggle('active', button.dataset.filter === filterKey);
+        });
+      }
+
+      function applyFilter() {
+        const sinceValue = sinceInput.value ? new Date(sinceInput.value) : null;
+
+        cards.forEach(card => {
+          const items = [...card.querySelectorAll('.entry-list li')];
+          let visibleCount = 0;
+
+          items.forEach(item => {
+            const date = parseDate(item.textContent);
+            let visible = true;
+            if (date) {
+              if (activeYear !== null) {
+                visible = date.getFullYear() === activeYear;
+              }
+              if (visible && sinceValue) {
+                visible = date >= sinceValue;
+              }
+            }
+            item.style.display = visible ? 'block' : 'none';
+            if (visible) visibleCount++;
+          });
+
+          const count = card.querySelector('.count');
+          count.textContent = activeYear !== null || sinceValue ? visibleCount : card.dataset.total;
+        });
+      }
+
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+          const filter = button.dataset.filter;
+          const isActive = button.classList.contains('active');
+
+          if (isActive && filter !== 'all') {
+            setActiveButton('all');
+            activeYear = null;
+            sinceInput.value = '';
+            applyFilter();
+            return;
+          }
+
+          setActiveButton(filter);
+          if (filter === 'all') {
+            activeYear = null;
+            sinceInput.value = '';
+          } else {
+            activeYear = Number(filter);
+            sinceInput.value = '';
+          }
+
+          applyFilter();
+        });
+      });
+
+      sinceInput.addEventListener('change', () => {
+        setActiveButton('');
+        applyFilter();
+      });
+
+      setActiveButton('all');
+      applyFilter();
+    })();
+  </script>
+</body>
+</html></content>
