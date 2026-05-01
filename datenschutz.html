@@ -2,14 +2,114 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/png" href="images/output-onlinepngtools.png">
   <title>Datenschutz</title>
   <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ===== MOBILE FIX ===== */
+    @media (max-width: 768px) {
+
+      .app {
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Sidebar → oben */
+      .sidebar {
+        width: 100%;
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .brand-title {
+        font-size: 16px;
+      }
+
+      .sidebar-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .sidebar-nav li {
+        margin: 0;
+      }
+
+      .sidebar-nav a {
+        font-size: 13px;
+        padding: 6px 10px;
+      }
+
+      /* Impressum + Datenschutz */
+      .sidebar-nav li:last-child,
+      .sidebar-nav li:nth-last-child(2) {
+        width: 100%;
+        margin-top: 4px;
+      }
+
+      /* Main */
+      .main {
+        padding: 12px;
+      }
+
+      .section h1 {
+        font-size: 20px;
+        margin-bottom: 14px;
+      }
+
+      /* Abschnitte als Cards */
+      .section > div {
+        margin-top: 16px;
+        padding: 14px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.03);
+      }
+
+      .section h3 {
+        font-size: 16px;
+        margin-bottom: 6px;
+      }
+
+      .section p {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      /* Listen */
+      .section ul {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      /* Links */
+      .section a {
+        word-break: break-word;
+      }
+
+      /* Footer Text */
+      .section p:last-child {
+        font-size: 12px;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <div class="app">
+
     <aside class="sidebar">
       <div class="brand">
         <span class="brand-blob">M</span>
@@ -17,13 +117,15 @@
           <p class="brand-title">Monomorto</p>
         </div>
       </div>
+
       <ul class="sidebar-nav">
         <li><a href="index.html">Home</a></li>
         <li><a href="dart.html">Dart</a></li>
         <li><a href="projekte.html">Projekte</a></li>
         <li><a href="gaming.html">Gaming</a></li>
         <li><a href="minispiele.html">Mini-Spiele</a></li>
-        <li style="margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">
+
+        <li style="margin-top: 12px;">
           <a href="impressum.html" style="font-size: 12px; color: #8f98b2;">Impressum</a>
         </li>
         <li>
@@ -31,10 +133,11 @@
         </li>
       </ul>
     </aside>
+
     <main class="main">
       <section class="section">
         <h1>Datenschutzerklärung</h1>
-        
+
         <div>
           <h3>1. Verantwortlicher für die Datenverarbeitung</h3>
           <p>Diese Website wird privat betrieben. Persönliche Daten des Betreibers werden aus Datenschutzgründen nicht öffentlich angegeben. Bei Fragen siehe Impressum.</p>
@@ -42,61 +145,66 @@
 
         <div>
           <h3>2. Allgemeines zur Datenverarbeitung</h3>
-          <p>Diese Website wird statisch bereitgestellt und speichert keine persönlichen Daten auf eigenen Servern. Es findet keine automatische Erfassung von Besucherdaten statt, sofern diese nicht über externe Dienste erfolgt (siehe Abschnitte 3 und 4).</p>
+          <p>Diese Website wird statisch bereitgestellt und speichert keine persönlichen Daten auf eigenen Servern. Es findet keine automatische Erfassung von Besucherdaten statt, sofern diese nicht über externe Dienste erfolgt.</p>
         </div>
 
         <div>
           <h3>3. Externe Inhalte und Dienste</h3>
-          <p><strong>YouTube-Embeds und Links:</strong> Diese Website verlinkt auf und bindet YouTube-Inhalte ein. YouTube (Betreiber: Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland) kann beim Laden dieser Inhalte Daten wie deine IP-Adresse, Besuchszeit und Browser-Informationen erfassen. Weitere Informationen findest du in der <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Datenschutzerklärung</a>.</p>
-          <p><strong>Google Play Store Links:</strong> Links zur Google Play Store öffnen eine externe Website. Die dort erfassten Daten unterliegen den Bedingungen von Google und sind nicht Gegenstand dieser Datenschutzerklärung.</p>
-          <p><strong>Steam API (falls aktiviert):</strong> Sollte diese Website Daten von der Steam API abrufen, können Daten über Spielzeiten und Gaming-Verhalten erfasst werden. Weitere Informationen findest du in der <a href="https://steampowered.com/privacy/privacy/" target="_blank" rel="noopener noreferrer">Steam Datenschutzerklärung</a>.</p>
+          <p><strong>YouTube:</strong> Beim Laden von YouTube-Inhalten können Daten wie IP-Adresse und Browserinformationen erfasst werden. <a href="https://policies.google.com/privacy" target="_blank">Mehr Infos</a>.</p>
+          <p><strong>Google Play:</strong> Öffnet externe Website – dort gelten Googles Bedingungen.</p>
+          <p><strong>Steam API:</strong> Kann Gaming-Daten erfassen. <a href="https://steampowered.com/privacy/privacy/" target="_blank">Mehr Infos</a>.</p>
         </div>
 
         <div>
           <h3>4. Cookies</h3>
-          <p>Diese Website setzt selbst keine Cookies. Externe eingebettete Inhalte (z. B. YouTube-Videos) können jedoch Cookies setzen. Dazu gibt es ausführliche Informationen in den jeweiligen Datenschutzerklärungen der externen Anbieter.</p>
+          <p>Diese Website setzt selbst keine Cookies. Externe Inhalte können jedoch Cookies verwenden.</p>
         </div>
 
         <div>
           <h3>5. Webseitazugriffe und Logging</h3>
-          <p>Der Webhoster (z. B. GitHub Pages) speichert möglicherweise automatisch Zugriffsdaten wie IP-Adressen, User-Agent und Zugriffzeit in seinen Logfiles. Diese Daten werden für Sicherheitszwecke und Systemverwaltung verwendet. Bitte konsultiere die <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener noreferrer">GitHub Datenschutzerklärung</a>, falls relevant.</p>
+          <p>Hosting-Anbieter können Zugriffsdaten speichern. <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank">GitHub Datenschutz</a>.</p>
         </div>
 
         <div>
-          <h3>6. Kontaktformulare oder direkte Kontakte</h3>
-          <p>Diese Website hat kein Kontaktformular. Falls du über das Impressum Kontakt aufnimmst, werden deine Daten (Name, E-Mail, Nachricht) nur zu dem Zweck gespeichert und verwendet, deine Anfrage zu beantworten. Deine Daten werden nicht an Dritte weitergegeben, es sei denn, es ist zur Beantwortung deiner Anfrage erforderlich.</p>
+          <h3>6. Kontakt</h3>
+          <p>Daten werden nur zur Beantwortung deiner Anfrage verwendet.</p>
         </div>
 
         <div>
           <h3>7. Deine Rechte</h3>
-          <p>Nach der Datenschutz-Grundverordnung (DSGVO) hast du folgende Rechte:</p>
-          <ul style="color: #d0d6df; margin: 16px 0 0; padding: 0 0 0 20px;">
-            <li>Recht auf Auskunft über deine gespeicherten Daten</li>
-            <li>Recht auf Berichtigung falscher Daten</li>
-            <li>Recht auf Löschung (Recht auf Vergessenwerden)</li>
-            <li>Recht auf Einschränkung der Verarbeitung</li>
-            <li>Recht auf Datenportabilität</li>
-            <li>Recht auf Widerspruch gegen die Verarbeitung</li>
+          <ul>
+            <li>Auskunft</li>
+            <li>Berichtigung</li>
+            <li>Löschung</li>
+            <li>Einschränkung</li>
+            <li>Datenübertragbarkeit</li>
+            <li>Widerspruch</li>
           </ul>
-          <p style="margin-top: 20px;">Um deine Rechte geltend zu machen, kontaktiere bitte den oben genannten Verantwortlichen unter <a href="mailto:privacypolicydart.parting827@passinbox.com">privacypolicydart.parting827@passinbox.com</a>.</p>
         </div>
 
         <div>
-          <h3>8. Beschwerde bei einer Aufsichtsbehörde</h3>
-          <p>Du hast das Recht, dich bei einer Datenschutzbehörde über die Verarbeitung deiner Daten zu beschweren. Die zuständige Aufsichtsbehörde ist das Landesdatenschutzamt des Bundeslandes, in dem schädigung stattfindet, oder in dem sich der Verantwortliche befindet.</p>
+          <h3>8. Beschwerde</h3>
+          <p>Du kannst dich bei einer Datenschutzbehörde beschweren.</p>
         </div>
 
         <div>
-          <h3>9. Änderungen der Datenschutzerklärung</h3>
-          <p>Diese Datenschutzerklärung kann jederzeit ohne vorherige Ankündigung aktualisiert werden, um Änderungen in der Datenverarbeitung oder rechtliche Anforderungen widerzuspiegeln. Bitte überprüfe diese Seite regelmäßig auf Aktualisierungen.</p>
+          <h3>9. Änderungen</h3>
+          <p>Diese Erklärung kann jederzeit angepasst werden.</p>
         </div>
 
         <div>
-          <h3>10. Kontakt zum Datenschutzbeauftragten</h3>
-          <p>Bei Fragen zu dieser Datenschutzerklärung oder zur Datenverarbeitung kontaktiere bitte: <a href="mailto:privacypolicydart.parting827@passinbox.com">privacypolicydart.parting827@passinbox.com</a></p>
+          <h3>10. Kontakt</h3>
+          <p>
+            <a href="mailto:privacypolicydart.parting827@passinbox.com">
+              privacypolicydart.parting827@passinbox.com
+            </a>
+          </p>
         </div>
 
-        <p style="margin-top: 40px; color: #8f98b2; font-size: 12px;">Letzte Aktualisierung: April 2026</p>
+        <p style="margin-top: 30px; color: #8f98b2; font-size: 12px;">
+          Letzte Aktualisierung: April 2026
+        </p>
+
       </section>
     </main>
   </div>

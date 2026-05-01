@@ -2,14 +2,106 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/png" href="images/output-onlinepngtools.png">
   <title>Projekte</title>
   <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* ===== MOBILE FIX ===== */
+    @media (max-width: 768px) {
+
+      .app {
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Sidebar → oben */
+      .sidebar {
+        width: 100%;
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .brand-title {
+        font-size: 16px;
+      }
+
+      .sidebar-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .sidebar-nav li {
+        margin: 0;
+      }
+
+      .sidebar-nav a {
+        font-size: 13px;
+        padding: 6px 10px;
+      }
+
+      /* Impressum / Datenschutz */
+      .sidebar-nav li:last-child,
+      .sidebar-nav li:nth-last-child(2) {
+        width: 100%;
+        margin-top: 4px;
+      }
+
+      /* Main */
+      .main {
+        padding: 12px;
+      }
+
+      .section h1 {
+        font-size: 20px;
+      }
+
+      /* Projekte Blöcke */
+      .section > div {
+        margin-top: 16px;
+        padding: 14px;
+        border-radius: 12px;
+        background: rgba(255,255,255,0.03);
+      }
+
+      .section h3 {
+        font-size: 16px;
+        margin-bottom: 6px;
+      }
+
+      .section p {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+
+      /* Buttons */
+      .button {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <div class="app">
+
     <aside class="sidebar">
       <div class="brand">
         <span class="brand-blob">M</span>
@@ -17,13 +109,15 @@
           <p class="brand-title">Monomorto</p>
         </div>
       </div>
+
       <ul class="sidebar-nav">
         <li><a href="index.html">Home</a></li>
         <li><a href="dart.html">Dart</a></li>
         <li><a href="projekte.html" class="active">Projekte</a></li>
         <li><a href="gaming.html">Gaming</a></li>
         <li><a href="minispiele.html">Mini-Spiele</a></li>
-        <li style="margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;">
+
+        <li style="margin-top: 12px;">
           <a href="impressum.html" style="font-size: 12px; color: #8f98b2;">Impressum</a>
         </li>
         <li>
@@ -31,23 +125,31 @@
         </li>
       </ul>
     </aside>
+
     <main class="main">
       <section class="section">
         <h1>Projekte</h1>
+
         <div>
           <h3>Steel Darts App</h3>
           <p>Meine eigene Steel Darts App für Android.</p>
-          <a href="https://play.google.com/store/apps/details?id=com.mydarts.darts&hl=de&pli=1" target="_blank" rel="noopener noreferrer" class="button">
+          <a href="https://play.google.com/store/apps/details?id=com.mydarts.darts&hl=de&pli=1"
+             target="_blank" rel="noopener noreferrer" class="button">
             Zur App im Google Play Store
           </a>
         </div>
+
         <div>
           <h3>YouTube Kanal</h3>
           <p>Mein Kanal mit selbst komponierten Klavierstücken.</p>
-          <a href="https://www.youtube.com/@MonomortoPiano" target="_blank" rel="noopener noreferrer" class="button" aria-label="YouTube Kanal Monomorto Piano">
+          <a href="https://www.youtube.com/@MonomortoPiano"
+             target="_blank" rel="noopener noreferrer"
+             class="button"
+             aria-label="YouTube Kanal Monomorto Piano">
             Zum YouTube Kanal
           </a>
         </div>
+
       </section>
     </main>
   </div>
