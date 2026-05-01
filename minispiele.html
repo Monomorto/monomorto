@@ -353,7 +353,12 @@ function submitGuess() {
   const input = document.getElementById("guessInput");
   const guess = input.value.toLowerCase();
 
-  if (guess.length !== 5) return showMessage("Bitte 5 Buchstaben eingeben");
+  if (guess.length !== 5) {
+    showMessage("Bitte 5 Buchstaben eingeben");
+    input.focus(); // 👈 bleibt offen
+    return;
+  }
+
   if (attempts >= maxAttempts) return;
 
   addRow(guess);
@@ -364,12 +369,17 @@ function submitGuess() {
   if (guess === solution) {
     showMessage("Richtig! 🎉");
     input.disabled = true;
+    return;
   } else if (attempts === maxAttempts) {
     showMessage("Lösung: " + solution.toUpperCase());
     input.disabled = true;
+    return;
   }
 
   input.value = "";
+
+  // 🔥 WICHTIG: Tastatur offen halten
+  input.focus();
 }
 
 function addRow(guess) {
