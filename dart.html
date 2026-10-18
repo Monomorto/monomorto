@@ -9,6 +9,31 @@
   <link rel="stylesheet" href="styles.css">
 
   <style>
+    .split-record {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: min(100%, 260px);
+      margin: 0 0 20px auto;
+      padding: 12px 16px;
+      background: #171f33;
+      border: 1px solid rgba(92,230,230,0.2);
+      border-radius: 16px;
+    }
+
+    .split-record-label {
+      color: #8f98b2;
+      font-size: 12px;
+    }
+
+    .split-record-score {
+      color: #5ce6e6;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
     /* ===== MOBILE FIX ===== */
     @media (max-width: 768px) {
 
@@ -95,6 +120,10 @@
         text-align: center;
       }
 
+      .split-record {
+        margin-bottom: 12px;
+      }
+
       /* ===== GRID ===== */
       .grid {
         display: flex;
@@ -168,13 +197,12 @@
         </div>
       </div>
 
-      <div class="grid">
+      <div class="split-record" aria-label="Höchster Split-Score: 622">
+        <span class="split-record-label">Höchster Split-Score</span>
+        <strong class="split-record-score">622</strong>
+      </div>
 
-        <div class="card">
-          <h2>Höchster Split-Score</h2>
-          <p class="count">622</p>
-          <small>Persönlicher Bestwert</small>
-        </div>
+      <div class="grid">
 
         <div class="card">
           <h2>180er</h2>
@@ -248,9 +276,7 @@
       let activeYear = null;
       const sinceInput = document.getElementById('filterSince');
       const buttons = document.querySelectorAll('.filter-button');
-      const cards = [...document.querySelectorAll('.card')].filter(card =>
-        card.querySelector('.entry-list')
-      );
+      const cards = [...document.querySelectorAll('.card')];
 
       cards.forEach(card => {
         const total = card.querySelectorAll('.entry-list li').length;
