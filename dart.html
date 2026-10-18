@@ -171,9 +171,16 @@
       <div class="grid">
 
         <div class="card">
+          <h2>Höchster Split-Score</h2>
+          <p class="count">622</p>
+          <small>Persönlicher Bestwert</small>
+        </div>
+
+        <div class="card">
           <h2>180er</h2>
-          <p class="count">8</p>
+          <p class="count">9</p>
           <ul class="entry-list">
+            <li>14.10.2026</li>
             <li>04.10.2026</li>
             <li>28.08.2026</li>
             <li>14.03.2026</li>
@@ -241,7 +248,9 @@
       let activeYear = null;
       const sinceInput = document.getElementById('filterSince');
       const buttons = document.querySelectorAll('.filter-button');
-      const cards = [...document.querySelectorAll('.card')];
+      const cards = [...document.querySelectorAll('.card')].filter(card =>
+        card.querySelector('.entry-list')
+      );
 
       cards.forEach(card => {
         const total = card.querySelectorAll('.entry-list li').length;
