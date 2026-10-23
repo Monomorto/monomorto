@@ -62,6 +62,12 @@
   font-weight: bold;
 }
 
+.wordle-attempts {
+  margin: 0;
+  color: #aaa8b8;
+  font-size: 14px;
+}
+
 /* ===================== */
 /* KEYBOARD DESKTOP */
 /* ===================== */
@@ -203,7 +209,7 @@
       }
 
       .sidebar-nav a {
-        font-size: 13px;
+        font-size: 15px;
         padding: 6px 10px;
       }
 
@@ -275,10 +281,10 @@
       <li><a href="gaming.html">Gaming</a></li>
       <li><a href="minispiele.html" class="active">Mini-Spiele</a></li>
       <li style="margin-top: 12px;">
-        <a href="impressum.html" style="font-size: 12px; color: #8f98b2;">Impressum</a>
+        <a href="impressum.html" class="meta-link">Impressum</a>
       </li>
       <li>
-        <a href="datenschutz.html" style="font-size: 12px; color: #8f98b2;">Datenschutz</a>
+        <a href="datenschutz.html" class="meta-link">Datenschutz</a>
       </li>
     </ul>
   </aside>
@@ -292,6 +298,7 @@
       <div class="card wordle-container">
         <h2>Tägliches Wordle</h2>
 
+        <p id="attempts-remaining" class="wordle-attempts" aria-live="polite">Noch 6 Versuche</p>
         <div id="board"></div>
 
         <input id="guessInput" class="wordle-input" maxlength="5" placeholder="Wort eingeben">
@@ -344,6 +351,7 @@ const solution = getDailyWord();
 let attempts = 0;
 const maxAttempts = 6;
 const usedLetters = new Set();
+const attemptsRemaining = document.getElementById("attempts-remaining");
 
 document.getElementById("guessInput").addEventListener("keydown", e => {
   if (e.key === "Enter") submitGuess();
@@ -365,6 +373,8 @@ function submitGuess() {
   updateKeyboard(guess);
 
   attempts++;
+  const remaining = maxAttempts - attempts;
+  attemptsRemaining.textContent = `Noch ${remaining} ${remaining === 1 ? "Versuch" : "Versuche"}`;
 
   if (guess === solution) {
     showMessage("Richtig! 🎉");

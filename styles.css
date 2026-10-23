@@ -108,6 +108,15 @@ a:hover {
   border-radius: 4px;
   background: #a78bfa;
 }
+body:not(.home-page) .sidebar-nav a.active {
+  background: rgba(167,139,250,0.1);
+  color: #f6f4fb;
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px rgba(167,139,250,0.12);
+}
+body:not(.home-page) .sidebar-nav a.active::before {
+  display: none;
+}
 .main {
   flex: 1;
   padding: 32px;
@@ -458,9 +467,23 @@ p {
     width: 100%;
     box-sizing: border-box;
     padding: 10px 12px;
-    font-size: 13px;
+    font-size: 15px;
     border-radius: 10px;
     white-space: normal;
+  }
+
+  body:not(.home-page) .sidebar-nav a {
+    font-size: 15px;
+  }
+
+  .sidebar-nav a.meta-link {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+  }
+
+  .home-page .sidebar-nav a {
+    font-size: 15px;
   }
   
   .main {
@@ -566,7 +589,7 @@ p {
 @media (max-width: 680px) {
   .sidebar-nav a {
     padding: 10px 14px;
-    font-size: 13px;
+    font-size: 15px;
   }
   
   .topbar {
