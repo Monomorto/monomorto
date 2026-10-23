@@ -95,6 +95,12 @@
       font-size: 12px;
     }
 
+    .gaming-estimate-note {
+      margin: -4px 0 14px;
+      color: var(--gaming-muted);
+      font-size: 12px;
+    }
+
     .gaming-stats {
       display: grid;
       gap: 10px;
@@ -334,8 +340,8 @@
             <p class="gaming-description">Meine meistgespielten Games und die Zeit, die ich darin verbracht habe.</p>
           </div>
           <div class="gaming-total" aria-label="Gesamte Spielzeit">
-            <span class="gaming-total-label">Gesamt erfasst</span>
-            <strong id="gaming-total-hours">1.756</strong>
+            <span class="gaming-total-label">Gesamt inkl. Schätzungen</span>
+            <strong id="gaming-total-hours">4.606</strong>
             <span>Stunden</span>
           </div>
         </header>
@@ -345,45 +351,62 @@
             <h2 id="gaming-list-title">Meistgespielte Spiele</h2>
             <p>Stand: <time datetime="2026-10-24">24.10.2026</time></p>
           </div>
+          <p class="gaming-estimate-note">Tanki Online und FIFA 23: geschätzte Spielzeit.</p>
 
           <ol class="gaming-stats">
-            <li class="gaming-stat" data-hours="1254">
+            <li class="gaming-stat" data-hours="2450" data-estimated="true">
               <span class="gaming-rank" aria-hidden="true">01</span>
               <div>
+                <div class="gaming-game-name">Tanki Online <span class="gaming-badge">Geschätzt</span></div>
+                <progress class="gaming-bar" aria-label="Tanki Online: geschätzte 2450 Stunden"></progress>
+              </div>
+              <div class="gaming-hours">ca. 2.450<span>Std.</span></div>
+            </li>
+            <li class="gaming-stat" data-hours="1254">
+              <span class="gaming-rank" aria-hidden="true">02</span>
+              <div>
                 <div class="gaming-game-name">Dead by Daylight <span class="gaming-badge">Meistgespielt</span></div>
-                <progress class="gaming-bar" max="1254" value="1254" aria-label="Dead by Daylight: 1254 von 1254 Stunden"></progress>
+                <progress class="gaming-bar" aria-label="Dead by Daylight: 1254 Stunden"></progress>
               </div>
               <div class="gaming-hours">1.254<span>Std.</span></div>
             </li>
+            <li class="gaming-stat" data-hours="400" data-estimated="true">
+              <span class="gaming-rank" aria-hidden="true">03</span>
+              <div>
+                <div class="gaming-game-name">FIFA 23 <span class="gaming-badge">Geschätzt</span></div>
+                <progress class="gaming-bar" aria-label="FIFA 23: geschätzte 400 Stunden"></progress>
+              </div>
+              <div class="gaming-hours">ca. 400<span>Std.</span></div>
+            </li>
             <li class="gaming-stat" data-hours="198">
-              <span class="gaming-rank" aria-hidden="true">02</span>
+              <span class="gaming-rank" aria-hidden="true">04</span>
               <div>
                 <div class="gaming-game-name">Sons of the Forest</div>
-                <progress class="gaming-bar" max="1254" value="198" aria-label="Sons of the Forest: 198 von 1254 Stunden"></progress>
+                <progress class="gaming-bar" aria-label="Sons of the Forest: 198 Stunden"></progress>
               </div>
               <div class="gaming-hours">198<span>Std.</span></div>
             </li>
             <li class="gaming-stat" data-hours="130">
-              <span class="gaming-rank" aria-hidden="true">03</span>
+              <span class="gaming-rank" aria-hidden="true">05</span>
               <div>
                 <div class="gaming-game-name">R.E.P.O.</div>
-                <progress class="gaming-bar" max="1254" value="130" aria-label="R.E.P.O.: 130 von 1254 Stunden"></progress>
+                <progress class="gaming-bar" aria-label="R.E.P.O.: 130 Stunden"></progress>
               </div>
               <div class="gaming-hours">130<span>Std.</span></div>
             </li>
             <li class="gaming-stat" data-hours="95">
-              <span class="gaming-rank" aria-hidden="true">04</span>
+              <span class="gaming-rank" aria-hidden="true">06</span>
               <div>
                 <div class="gaming-game-name">Lethal Company</div>
-                <progress class="gaming-bar" max="1254" value="95" aria-label="Lethal Company: 95 von 1254 Stunden"></progress>
+                <progress class="gaming-bar" aria-label="Lethal Company: 95 Stunden"></progress>
               </div>
               <div class="gaming-hours">95<span>Std.</span></div>
             </li>
             <li class="gaming-stat" data-hours="79">
-              <span class="gaming-rank" aria-hidden="true">05</span>
+              <span class="gaming-rank" aria-hidden="true">07</span>
               <div>
                 <div class="gaming-game-name">Golf with Your Friends</div>
-                <progress class="gaming-bar" max="1254" value="79" aria-label="Golf with Your Friends: 79 von 1254 Stunden"></progress>
+                <progress class="gaming-bar" aria-label="Golf with Your Friends: 79 Stunden"></progress>
               </div>
               <div class="gaming-hours">79<span>Std.</span></div>
             </li>
@@ -395,7 +418,17 @@
   </div>
   <script>
     const gamingStats = [...document.querySelectorAll(".gaming-stat")];
-    const totalGamingHours = gamingStats.reduce((total, stat) => total + Number(stat.dataset.hours), 0);
+    const statHours = gamingStats.map(stat => Number(stat.dataset.hours));
+    const maxGamingHours = Math.max(...statHours);
+    const totalGamingHours = statHours.reduce((total, hours) => total + hours, 0);
+
+    gamingStats.forEach(stat => {
+      const hours = Number(stat.dataset.hours);
+      const progress = stat.querySelector(".gaming-bar");
+      progress.max = maxGamingHours;
+      progress.value = hours;
+    });
+
     document.getElementById("gaming-total-hours").textContent = totalGamingHours.toLocaleString("de-DE");
   </script>
 </body>
