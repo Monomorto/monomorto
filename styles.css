@@ -472,6 +472,16 @@ p {
     white-space: normal;
   }
 
+  body:not(.home-page) .sidebar-nav a.active {
+    background: rgba(167,139,250,0.1);
+    color: #f6f4fb;
+    box-shadow: inset 0 0 0 1px rgba(167,139,250,0.12);
+  }
+
+  body:not(.home-page) .sidebar-nav a.active::before {
+    display: none;
+  }
+
   body:not(.home-page) .sidebar-nav a {
     font-size: 15px;
   }
