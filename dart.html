@@ -34,6 +34,75 @@
       letter-spacing: -0.04em;
     }
 
+    .entry-toggle {
+      margin-top: 12px;
+      padding: 8px 12px;
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      border-radius: 10px;
+      background: rgba(167, 139, 250, 0.08);
+      color: #c9b8ff;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .entry-toggle:hover {
+      background: rgba(167, 139, 250, 0.16);
+    }
+
+    .entry-toggle[hidden] {
+      display: none;
+    }
+
+    .checkout-progress {
+      margin: -8px 0 18px;
+      color: #aaa8b8;
+      font-size: 14px;
+    }
+
+    .checkout-card {
+      margin-top: 24px;
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checkout-cell {
+      display: grid;
+      min-height: 42px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.035);
+      color: #aaa8b8;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .checkout-cell.is-completed {
+      border-color: rgba(119, 220, 164, 0.28);
+      background: rgba(62, 150, 103, 0.16);
+      color: #9ce7b9;
+    }
+
+    .checkout-cell.is-impossible {
+      border-color: rgba(255, 255, 255, 0.04);
+      background: rgba(0, 0, 0, 0.18);
+      color: #696777;
+      text-decoration: line-through;
+    }
+
+    .checkout-cell:focus-visible {
+      outline: 2px solid #a78bfa;
+      outline-offset: 2px;
+    }
+
     /* ===== MOBILE FIX ===== */
     @media (max-width: 768px) {
 
@@ -151,6 +220,16 @@
 
       .entry-list li {
         font-size: 14px;
+      }
+
+      .checkout-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 6px;
+      }
+
+      .checkout-cell {
+        min-height: 38px;
+        font-size: 12px;
       }
     }
   </style>
@@ -273,6 +352,13 @@
         </div>
 
       </div>
+
+      <section class="card checkout-card" aria-labelledby="checkout-title">
+        <h2 id="checkout-title">Master-Out-Checkouts</h2>
+        <p class="checkout-progress" id="checkout-progress" aria-live="polite"></p>
+        <p class="checkout-progress">Grün = geschafft · Grau = noch offen · Durchgestrichen = mit drei Darts nicht möglich</p>
+        <ul class="checkout-grid" id="checkout-grid" aria-label="Checkouts von 100 bis 180"></ul>
+      </section>
     </main>
 
     <footer class="mobile-footer" aria-label="Rechtliche Informationen">
@@ -286,12 +372,73 @@
       let activeYear = null;
       const sinceInput = document.getElementById('filterSince');
       const buttons = document.querySelectorAll('.filter-button');
-      const cards = [...document.querySelectorAll('.card')];
+      const cards = [...document.querySelectorAll('.grid > .card')];
+      const checkoutGrid = document.getElementById('checkout-grid');
+      const checkoutProgress = document.getElementById('checkout-progress');
 
       cards.forEach(card => {
         const total = card.querySelectorAll('.entry-list li').length;
         card.dataset.total = total;
+        card.dataset.expanded = 'false';
+
+        if (total > 10) {
+          const toggle = document.createElement('button');
+          toggle.type = 'button';
+          toggle.className = 'entry-toggle';
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.addEventListener('click', () => {
+            card.dataset.expanded = card.dataset.expanded === 'true' ? 'false' : 'true';
+            applyFilter();
+          });
+          card.querySelector('.entry-list').after(toggle);
+        }
       });
+
+      function renderCheckouts() {
+        const dartScores = new Set([
+          ...Array.from({ length: 20 }, (_, index) => index + 1),
+          ...Array.from({ length: 20 }, (_, index) => (index + 1) * 2),
+          ...Array.from({ length: 20 }, (_, index) => (index + 1) * 3),
+          25,
+          50
+        ]);
+        const masterOutFinishes = new Set([
+          ...Array.from({ length: 20 }, (_, index) => (index + 1) * 2),
+          ...Array.from({ length: 20 }, (_, index) => (index + 1) * 3),
+          50
+        ]);
+        const firstTwoDartScores = new Set();
+        dartScores.forEach(first => {
+          dartScores.forEach(second => firstTwoDartScores.add(first + second));
+        });
+        const possibleScores = new Set();
+        firstTwoDartScores.forEach(firstTwo => {
+          masterOutFinishes.forEach(finish => possibleScores.add(firstTwo + finish));
+        });
+        const completedScores = new Set(
+          [...document.querySelectorAll('.entry-list li')]
+            .map(item => Number(item.textContent.match(/^\s*(\d{2,3})\s*[–-]/)?.[1]))
+            .filter(score => score >= 100 && score <= 180 && possibleScores.has(score))
+        );
+
+        checkoutGrid.replaceChildren();
+        for (let score = 100; score <= 180; score++) {
+          const completed = completedScores.has(score);
+          const possible = possibleScores.has(score);
+          const cell = document.createElement('li');
+          cell.className = `checkout-cell${completed ? ' is-completed' : ''}${possible ? '' : ' is-impossible'}`;
+          cell.textContent = score;
+          cell.setAttribute(
+            'aria-label',
+            `${score}: ${possible ? (completed ? 'geschafft' : 'noch offen') : 'mit drei Darts nicht möglich'}`
+          );
+          checkoutGrid.append(cell);
+        }
+
+        const possibleCount = [...possibleScores].filter(score => score >= 100 && score <= 180).length;
+        checkoutProgress.textContent =
+          `${completedScores.size} von ${possibleCount} möglichen Checkouts geschafft`;
+      }
 
       function parseDate(text) {
         const match = text.match(/\b(\d{2})\.(\d{2})\.(\d{4})\b/);
@@ -310,7 +457,7 @@
 
         cards.forEach(card => {
           const items = [...card.querySelectorAll('.entry-list li')];
-          let visibleCount = 0;
+          const matchingItems = [];
 
           items.forEach(item => {
             const date = parseDate(item.textContent);
@@ -325,12 +472,24 @@
               }
             }
 
-            item.style.display = visible ? 'block' : 'none';
-            if (visible) visibleCount++;
+            if (visible) matchingItems.push(item);
           });
 
+          const expanded = card.dataset.expanded === 'true';
+          matchingItems.forEach((item, index) => {
+            item.style.display = expanded || index < 10 ? 'list-item' : 'none';
+          });
+
+          const visibleCount = matchingItems.length;
           const count = card.querySelector('.count');
           count.textContent = activeYear !== null || sinceValue ? visibleCount : card.dataset.total;
+
+          const toggle = card.querySelector('.entry-toggle');
+          if (toggle) {
+            toggle.hidden = visibleCount <= 10;
+            toggle.setAttribute('aria-expanded', String(expanded));
+            toggle.textContent = expanded ? 'Weniger anzeigen' : `Alle ${visibleCount} Einträge anzeigen`;
+          }
         });
       }
 
@@ -357,6 +516,7 @@
         applyFilter();
       });
 
+      renderCheckouts();
       setActiveButton('all');
       applyFilter();
     })();
