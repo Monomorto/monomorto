@@ -64,6 +64,44 @@
   font-weight: bold;
 }
 
+.wordle-input-label {
+  display: block;
+  margin: 16px 0 8px;
+  color: #cbc8d6;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.wordle-length-hint {
+  margin: 8px 0 0;
+  color: #aaa8b8;
+  font-size: 12px;
+}
+
+.word-length-preview {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.word-length-cell {
+  display: grid;
+  width: 34px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid #393746;
+  border-radius: 6px;
+  color: #f6f4fb;
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.word-length-cell.is-filled {
+  border-color: #a78bfa;
+  background: rgba(167, 139, 250, 0.1);
+}
+
 .wordle-attempts {
   margin: 0;
   color: #aaa8b8;
@@ -98,6 +136,7 @@
   transition: 0.2s;
   min-width: 32px;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .key.used {
@@ -303,7 +342,16 @@
         <p id="attempts-remaining" class="wordle-attempts" aria-live="polite">Noch 6 Versuche</p>
         <div id="board"></div>
 
-        <input id="guessInput" class="wordle-input" maxlength="5" placeholder="Wort eingeben">
+        <label class="wordle-input-label" for="guessInput">Dein Wort</label>
+        <div class="word-length-preview" aria-hidden="true">
+          <span class="word-length-cell"></span>
+          <span class="word-length-cell"></span>
+          <span class="word-length-cell"></span>
+          <span class="word-length-cell"></span>
+          <span class="word-length-cell"></span>
+        </div>
+        <p class="wordle-length-hint" id="wordle-length-hint">Gib ein Wort mit genau 5 Buchstaben ein.</p>
+        <input id="guessInput" class="wordle-input" maxlength="5" aria-describedby="wordle-length-hint" placeholder="5 Buchstaben" autocomplete="off">
         <button class="wordle-button" onclick="submitGuess()">Raten</button>
 
         <p id="message" class="wordle-message"></p>
@@ -321,9 +369,10 @@
 
 <script>
 const words = [
-"apfel","acker","alter","ampel","angel","anker","armut","asche","atlas","audio","augen","autos","azubi",
-"bande","banjo","baron","basis","beere","beile","biene","birne","bombe","bonus","bucht","bulle","bunte",
-"clown","coach","creme","danke","decke","delta","dicke","dinge","disco","dosen","drama","dreck","duell","durst",
+"abend","achse","ahorn","apfel","acker","alter","ampel","angel","anker","armut","asche","atlas","audio","augen","autor","autos","azubi",
+"bande","banjo","baron","basis","beere","beile","biene","birne","boden","bombe","bonus","brand","bucht","bulle","bunte",
+"chaos","clown","coach","creme",
+"danke","decke","delta","dicke","dinge","disco","dosen","drama","dreck","duell","durst",
 "eimer","elite","engel","erben","essen","etage","eulen",
 "fabel","faden","falle","farbe","feder","feuer","fisch","flame","flirt","fluch","folge","fuchs","funke",
 "gabel","gasse","geier","geist","genie","glanz","golem",
@@ -344,7 +393,7 @@ const words = [
 "vater","vegan","vogel",
 "wache","waden","waffe","wagen","wange","weide","weiss","werft","wette","woche","wolke","wurst",
 "yacht",
-"zange","zauber","zeile","zebra","zicke","ziege","zunge"
+"zange","zeile","zebra","zicke","ziege","zunge"
 ];
 
 function getDailyWord() {
@@ -359,8 +408,19 @@ let attempts = 0;
 const maxAttempts = 6;
 const usedLetters = new Set();
 const attemptsRemaining = document.getElementById("attempts-remaining");
+const guessInput = document.getElementById("guessInput");
+const wordLengthCells = [...document.querySelectorAll(".word-length-cell")];
 
-document.getElementById("guessInput").addEventListener("keydown", e => {
+function updateWordLengthPreview() {
+  const letters = [...guessInput.value];
+  wordLengthCells.forEach((cell, index) => {
+    cell.textContent = letters[index] || "";
+    cell.classList.toggle("is-filled", Boolean(letters[index]));
+  });
+}
+
+guessInput.addEventListener("input", updateWordLengthPreview);
+guessInput.addEventListener("keydown", e => {
   if (e.key === "Enter") submitGuess();
 });
 
@@ -394,6 +454,7 @@ function submitGuess() {
   }
 
   input.value = "";
+  updateWordLengthPreview();
 
   // 🔥 WICHTIG: Tastatur offen halten
   input.focus();
@@ -445,7 +506,10 @@ function createKeyboard() {
 
       key.onclick = () => {
         const input = document.getElementById("guessInput");
-        if (input.value.length < 5) input.value += letter;
+        if (input.value.length < 5) {
+          input.value += letter;
+          updateWordLengthPreview();
+        }
       };
 
       row.appendChild(key);
