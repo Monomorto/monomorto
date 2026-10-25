@@ -139,14 +139,22 @@
       letter-spacing: -0.03em;
     }
 
+    .home-updated {
+      margin: 24px 0 0;
+      color: var(--home-muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
     .home-page .grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 16px;
     }
 
     .home-page .home-card {
       display: flex;
-      min-height: 250px;
+      position: relative;
+      min-height: 230px;
       flex-direction: column;
       align-items: flex-start;
       padding: 26px;
@@ -181,7 +189,23 @@
       line-height: 1.65;
     }
 
-    .home-page .home-card .button {
+    .home-card-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: -10px 0 22px;
+    }
+
+    .home-card-preview span {
+      padding: 5px 9px;
+      border: 1px solid rgba(167, 139, 250, 0.14);
+      border-radius: 999px;
+      color: #c9b8ff;
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    .home-page .home-card .home-card-link {
       gap: 10px;
       margin-top: auto;
       padding: 0;
@@ -192,7 +216,19 @@
       font-weight: 600;
     }
 
-    .home-page .home-card .button:hover {
+    .home-page .home-card .home-card-link::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+    }
+
+    .home-page .home-card .home-card-link:focus-visible::after {
+      border-radius: 18px;
+      outline: 2px solid var(--home-accent);
+      outline-offset: 3px;
+    }
+
+    .home-page .home-card .home-card-link:hover {
       transform: none;
       opacity: 1;
       text-decoration: underline;
@@ -304,7 +340,7 @@
         <header class="home-intro">
           <p class="home-eyebrow">Monomorto · Persönliche Website</p>
           <h1>Willkommen bei Monomorto.</h1>
-          <p>Projekte, Dart und kleine Spiele – ein Ort für Dinge, die mich beschäftigen und die ich gerne teile.</p>
+          <p>Projekte, Dart, Gaming und kleine Spiele – ein Ort für Dinge, die mich beschäftigen und die ich gerne teile.</p>
         </header>
 
         <section id="daily-quote-section" class="home-quote" aria-label="Zitat des Tages">
@@ -317,24 +353,50 @@
           <h2 id="home-links-heading" class="home-section-heading">Entdecken</h2>
           <div class="grid">
             <article class="card home-card">
-              <h3>Meine Projekte</h3>
-              <p>Webprojekte und Ideen, die ich gerade umsetze oder plane.</p>
-              <a href="projekte.html" class="button">Mehr erfahren <span aria-hidden="true">→</span></a>
+              <h3>Projekte</h3>
+              <p>Eine Steel-Darts-App für Android und selbst komponierte Klavierstücke.</p>
+              <div class="home-card-preview" aria-label="Projektbereiche">
+                <span>Steel Darts App</span>
+                <span>Klaviermusik</span>
+              </div>
+              <a href="projekte.html" class="button home-card-link">Alle Projekte ansehen <span aria-hidden="true">→</span></a>
             </article>
 
             <article class="card home-card">
               <h3>Dart</h3>
-              <p>Eine Übersicht meiner besten Würfe, Highfinishes und Erfolge.</p>
-              <a href="dart.html" class="button">Zur Dart-Seite <span aria-hidden="true">→</span></a>
+              <p>Meine Würfe und Erfolge – von 180ern bis zu High-Finishes.</p>
+              <div class="home-card-preview" aria-label="Dart-Statistiken">
+                <span>180er</span>
+                <span>High-Finishes</span>
+              </div>
+              <a href="dart.html" class="button home-card-link">Dart-Erfolge ansehen <span aria-hidden="true">→</span></a>
+            </article>
+
+            <article class="card home-card">
+              <h3>Gaming</h3>
+              <p>Meine Spielzeiten im Überblick – inklusive der meistgespielten Games.</p>
+              <div class="home-card-preview" aria-label="Gaming-Inhalte">
+                <span>Spielzeiten</span>
+                <span>Top-Spiele</span>
+              </div>
+              <a href="gaming.html" class="button home-card-link">Gaming-Statistik ansehen <span aria-hidden="true">→</span></a>
             </article>
 
             <article class="card home-card">
               <h3>Mini-Spiele</h3>
               <p>Kleine Spiele für zwischendurch, darunter Wordle.</p>
-              <a href="minispiele.html" class="button">Zu den Mini-Spielen <span aria-hidden="true">→</span></a>
+              <div class="home-card-preview" aria-label="Mini-Spiele">
+                <span>Wordle</span>
+              </div>
+              <a href="minispiele.html" class="button home-card-link">Zu den Mini-Spielen <span aria-hidden="true">→</span></a>
             </article>
           </div>
         </section>
+
+        <p class="home-updated">
+          Zuletzt bearbeitet:
+          <time id="last-modified">Datum wird geladen</time>
+        </p>
       </section>
     </main>
 
@@ -371,9 +433,25 @@
     const quoteEl = document.getElementById('daily-quote');
     const authorEl = document.getElementById('daily-quote-author');
     const currentQuote = dailyQuotes[dayIndex];
+    const lastModifiedEl = document.getElementById('last-modified');
+    const lastModified = new Date(document.lastModified);
 
     if (quoteEl) {
       quoteEl.textContent = `„${currentQuote.text}“`;
+    }
+
+    if (lastModifiedEl) {
+      if (Number.isNaN(lastModified.getTime())) {
+        lastModifiedEl.textContent = 'Datum nicht verfügbar';
+      } else {
+        const localDate = [
+          lastModified.getFullYear(),
+          String(lastModified.getMonth() + 1).padStart(2, '0'),
+          String(lastModified.getDate()).padStart(2, '0')
+        ].join('-');
+        lastModifiedEl.dateTime = localDate;
+        lastModifiedEl.textContent = lastModified.toLocaleDateString('de-DE');
+      }
     }
 
     if (authorEl) {
